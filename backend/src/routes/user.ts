@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 import {sign} from 'hono/jwt'
-import {signupInput} from "../../../common/src/user.validation"
+import {signupInput} from "../../../common/src/user.validation.js"
 export const userRouter =new Hono<{
     Bindings:{
         DATABASE_URL:string,
@@ -18,16 +18,16 @@ userRouter.post('/signup', async (c) => {
             message: "Inputs are not correct"
         })
     }
+	const prisma=new PrismaClient({
+		datasourceUrl:c.env.DATABASE_URL,
+	}).$extends(withAccelerate())
 	try{
-		const prisma=new PrismaClient({
-			datasourceUrl:c.env.DATABASE_URL,
-		}).$extends(withAccelerate())
 		
-	
 		const user=await prisma.user.create({
 			data:{
-				email: body.email,
-				password:body.password
+				email: body.username,
+				password:body.password,
+				name:body.name
 			},
 		})
 		const jwt = await sign({id:user.id},c.env.JWT_SECRET)

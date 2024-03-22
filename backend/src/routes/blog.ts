@@ -11,7 +11,6 @@ export const blogRouter = new Hono<{
     userId: string;
   };
 }>();
-
 blogRouter.use("/*", async (c, next) => {
   try {
     const token = c.req.header("authorization") || "";
