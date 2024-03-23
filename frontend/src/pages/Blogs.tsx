@@ -1,32 +1,35 @@
-import { Appbar } from "../components/Appbar"
-import { BlogCard } from "../components/BlogCard"
+import { Appbar } from "../components/Appbar";
+import { BlogCard } from "../components/BlogCard";
+import { BlogSkeleton } from "../components/Blogskeleton";
+import { useBlogs } from "../hooks";
 
 export const Blogs = () => {
+  const { loading, blogs } = useBlogs();
+  if (loading) {
+    return (
+      <div>
+        <BlogSkeleton />
+        <BlogSkeleton />
+        <BlogSkeleton />
+      </div>
+    );
+  }
   return (
-    <div >
-        <Appbar />
-        <div className="flex justify-center">
-        <div className="max-w-xl">
-            <BlogCard 
-        authorName= {"Aditya Mukherji"}
-        title ={"Lorem ipsum dolor sit amet consectetur adipisicing elit"}
-        content= {"Lorem ipsum dolor sit amet consectetur adipisicing elit. At nesciunt eveniet aliquid excepturi est culpa, nostrum doloremque, aperiam natus sapiente ratione exercitationem quo iste recusandae enim veniam fuga mollitia odio!"}
-        publishedDate= {"22nd march 2024"}
-        />
-         <BlogCard 
-        authorName= {"Aditya Mukherji"}
-        title ={"Lorem ipsum dolor sit amet consectetur adipisicing elit"}
-        content= {"Lorem ipsum dolor sit amet consectetur adipisicing elit. At nesciunt eveniet aliquid excepturi est culpa, nostrum doloremque, aperiam natus sapiente ratione exercitationem quo iste recusandae enim veniam fuga mollitia odio!"}
-        publishedDate= {"22nd march 2024"}
-        />
-         <BlogCard 
-        authorName= {"Aditya Mukherji"}
-        title ={"Lorem ipsum dolor sit amet consectetur adipisicing elit"}
-        content= {"Lorem ipsum dolor sit amet consectetur adipisicing elit. At nesciunt eveniet aliquid excepturi est culpa, nostrum doloremque, aperiam natus sapiente ratione exercitationem quo iste recusandae enim veniam fuga mollitia odio!"}
-        publishedDate= {"22nd march 2024"}
-        />
+    <div>
+      <Appbar />
+      <div className="flex justify-center">
+        <div>
+          {blogs.map((blog) => (
+            <BlogCard
+              id={blog.id || ""}
+              authorName={blog.author.name || "Anonymous"}
+              title={blog.title}
+              content={blog.content}
+              publishedDate={"22nd march 2024"}
+            />
+          ))}
         </div>
-        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
